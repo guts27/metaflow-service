@@ -147,9 +147,11 @@ async def test_tags_autocomplete(cli, db):
 async def test_tags_autocomplete_event_refrash(cli, db):
     await _test_list_resources(cli, db, "/tags/autocomplete", 200, [])
     await add_flow(db, flow_id="HelloFlow")
-    _run = (await add_run(
-        db, flow_id="HelloFlow", run_id="HelloRun", tags=["tag:something"]
-    )).body
+    _run = (
+        await add_run(
+            db, flow_id="HelloFlow", run_id="HelloRun", tags=["tag:something"]
+        )
+    ).body
 
     # simulate the DB event instead of waiting for the periodic refresh
     await cli.server.app.AutoCompleteApi.refresh_run_tags_event_handler(
